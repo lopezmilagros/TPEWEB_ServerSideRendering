@@ -1,55 +1,40 @@
 # requests.hurl
 
 # 1. Obtener todos las obras
-GET http://localhost:8080/obras
+GET http://localhost:8080/listarObras
 HTTP 200
 
 
-# 2. Obtener la obra con id 8
-GET http://localhost:8080/obras/8
-HTTP 200
-[Asserts]
-jsonpath "$.id" == 8
-
-# 3. Crear una nueva obra
+# 2. Crear una nueva obra
 POST http://localhost:8080/obras
-Content-Type: application/json
+Content-Type: application/x-www-form-urlencoded
 
-{
-  "titulo": "Guernica4",
-  "descripcion": "Obra famosa de Picasso",
-  "artista": "Picasso",
-  "precio": "100.0",
-  "vendida": "false"
-}
+"titulo=Guernica&descripcion=Obra+famosa+de+Picasso&artista=Picasso&precio=100.0&vendida="
 
-HTTP 201
+HTTP 303
+
 [Asserts]
-jsonpath "$.id" isInteger
-jsonpath "$.titulo" == "Guernica4"
+header "Location" contains "/listarObras?"
 
 [Captures]
-obra_id: jsonpath "$.id"
+obra_id: header "Location" regex "obra_id=([0-9]+)"
 
-# 4. Update obra creada
-PUT http://localhost:8080/obras
-Content-Type: application/json
-{
-  "id": {{obra_id}},
-  "descripcion": "Una obra muy famosa del estilo cubismo pintada por Picasso"
-}
-HTTP 200
 
-# 5. Obtener obra actualizada para verificar la actualizacion
-GET http://localhost:8080/obras/{{obra_id}}
-HTTP 200
+# 4. Eliminar la obra recién creada
+POST http://localhost:8080/eliminar
+Content-Type: application/x-www-form-urlencoded
+
+"id={obra_id}"
+
+HTTP 303
+
 [Asserts]
-jsonpath "$.id" == {{obra_id}}
+header "Location" == "/listarObras"
 
-# 6. Eliminar la obra creada
-DELETE http://localhost:8080/obras/{{obra_id}}
+# 3. Chequear que NO está más en la lista
+GET http://localhost:8080/listarObras
 HTTP 200
 
-# 7. Chequear que se borro la obra
-GET http://localhost:8080/obras/{{obra_id}}
-HTTP 404
+[Asserts]
+body not contains "data-id=\"{{obra_id}}\""
+

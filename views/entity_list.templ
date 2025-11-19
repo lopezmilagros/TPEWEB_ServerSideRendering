@@ -8,7 +8,7 @@ templ ObraListContent(obras []models.Obra) {
             <p>No hay obras registradas.</p>
         } else {
             for _, obra := range obras {
-                <div class="shadowbox">
+                <div class="shadowbox" data-id={ obra.ID } data-titulo={ obra.Titulo }>
                     <h3>{ obra.Titulo }</h3>
 
                     <p>

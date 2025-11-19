@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"database/sql"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -159,7 +161,7 @@ func (h *ObraHandlerType) CrearObra(w http.ResponseWriter, r *http.Request) {
 		Valid: true,
 	}
 
-	_, err := h.queries.CreateObra(r.Context(), nuevaObra)
+	created, err := h.queries.CreateObra(r.Context(), nuevaObra)
 	if err != nil {
 		http.Error(w, "Error creando obra", http.StatusInternalServerError)
 		return
@@ -168,7 +170,8 @@ func (h *ObraHandlerType) CrearObra(w http.ResponseWriter, r *http.Request) {
 	log.Println("Obra creada correctamente a través del formulario")
 
 	// PRG: redirigir para evitar re-envío del form
-	http.Redirect(w, r, "/listarObras", http.StatusSeeOther)
+	// Usamos el fmt y el created id para luego en el hurl capturar el id y eliminar la obra creada
+	http.Redirect(w, r, fmt.Sprintf("/listarObras?obra_id=%d", created.ID), http.StatusSeeOther)
 }
 
 // Helpers para convertir NullString / NullBool a string
@@ -221,27 +224,74 @@ func (h *ObraHandlerType) deleteObra(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/listarObras", http.StatusSeeOther)
 }
 
-/*func (h *ObraHandlerType) obrasDisponibles(w http.ResponseWriter, r *http.Request) {
-	obras, err := h.queries.ListObrasDisponibles(r.Context())
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	var obrasResponse []models.Obra
-	for _, obra := range obras {
-		obrasResponse = append(obrasResponse, models.Obra{
-			ID:          obra.ID,
-			Titulo:      obra.Titulo,
-			Artista:     obra.Artista,
-			Descripcion: nullStringToString(obra.Descripcion),
-			Precio:      obra.Precio,
-			Vendida:     nullBoolToString(obra.Vendida),
-		})
+func updateObra(w http.ResponseWriter, r *http.Request) {
+	log.Println("Actualizando obra...")
+	//id de la obra a actualizar se encuentra dentro del Body.
+	// Definir estructura para decodificar JSON
+	type reqObra struct {
+		Id          int32  `json:"id"`
+		Titulo      string `json:"titulo"`
+		Descripcion string `json:"descripcion"`
+		Artista     string `json:"artista"`
+		Precio      string `json:"precio"`
+		Vendida     string `json:"vendida"`
 	}
 
-	// Render de la página principal con templ
-	if err := views.ObraList(obrasResponse).Render(r.Context(), w); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	//creo variable de tipo Obra
+	var reqobra reqObra
+	// Decodificar JSON del cuerpo de la solicitud
+	err := json.NewDecoder(r.Body).Decode(&reqobra)
+	if err != nil {
+		//http.Error(w, "Invalid inputtttt", http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("%s: %v", "Error", err), http.StatusBadRequest)
 		return
 	}
-}*/
+
+	var obraPorActualizar db.Obra
+	//buscar la obra por id
+	obraPorActualizar, err1 := dbQueries.GetObraById(r.Context(), reqobra.Id)
+	if err1 != nil {
+		http.Error(w, "Obra not found", http.StatusNotFound)
+		return
+	}
+
+	var obraActualizada db.UpdateObraParams
+
+	obraActualizada.ID = reqobra.Id
+	if reqobra.Titulo != "" {
+		obraActualizada.Titulo = reqobra.Titulo
+	} else {
+		obraActualizada.Titulo = obraPorActualizar.Titulo
+	}
+	if reqobra.Descripcion != "" {
+		obraActualizada.Descripcion = sql.NullString{String: reqobra.Descripcion, Valid: true}
+	} else {
+		obraActualizada.Descripcion = obraPorActualizar.Descripcion
+	}
+	if reqobra.Artista != "" {
+		obraActualizada.Artista = reqobra.Artista
+	} else {
+		obraActualizada.Artista = obraPorActualizar.Artista
+	}
+	if reqobra.Precio != "" {
+		obraActualizada.Precio = reqobra.Precio
+	} else {
+		obraActualizada.Precio = obraPorActualizar.Precio
+	}
+	if reqobra.Vendida == "true" {
+		obraActualizada.Vendida = sql.NullBool{Bool: true, Valid: true}
+	} else {
+		obraActualizada.Vendida = sql.NullBool{Bool: false, Valid: true}
+	}
+
+	err2 := dbQueries.UpdateObra(r.Context(), obraActualizada)
+	if err2 != nil {
+		http.Error(w, "Failed to update obra", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode("Obra actualizada exitosamente")
+	log.Println("Obra actualizada exitosamente.")
+
+}

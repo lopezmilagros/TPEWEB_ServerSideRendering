@@ -3,6 +3,10 @@ up:
 	@echo "Levantando la base de datos..."
 	cd base_de_datos && docker compose up --build -d 
 
+	@echo "Borrando templ viejos y regenerando..."
+	rm views/*_templ.go
+	templ generate
+
 	@echo "Levantando el servidor Go..."
 	go run .  > logs.txt 2>&1 &
 
@@ -20,8 +24,3 @@ down:
 	@echo "Deteniendo servidor Go..."
 	cd servidor && kill -9 $(shell lsof -t -i :8080)
 
-aux: 
-	make down
-	rm views/*_templ.go
-	templ generate
-	make up
