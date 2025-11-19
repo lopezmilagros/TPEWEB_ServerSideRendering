@@ -27,6 +27,11 @@ templ ObraListContent(obras []models.Obra) {
 
                     <p>{ obra.Vendida }</p>
 
+                     <form method="POST" action="/eliminar">
+                        <input type="hidden" name="id" value={ obra.ID } />
+                        <button type="submit">Eliminar</button>
+                    </form>
+
                     <hr />
                 </div>
             }
@@ -49,6 +54,25 @@ templ ObraList(obras []models.Obra) {
     @Layout("Catalogo", ObraListContent(obras))
 }
 
-templ ObraListDisponiblesContent() {
-    
+templ ObrasDisponiblesContent(obras []models.Obra) {
+    <header>
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="/exposiciones">Exposiciones</a>
+            <a href="/listarObras">Obras</a>
+            <a href="/administrar">Añadir</a>
+        </nav>
+    </header>
+    <div class="banner">
+        <img src="/static/Imagenes/exposicion.jpg" alt="Imagen de exposiciones" />
+    </div>
+
+    <h2>Obras disponibles</h2>
+
+    /*uso lo mismo que para listar obras*/
+    @ObraListContent(obras)  
+}
+
+templ ObrasDisponibles(obras []models.Obra) {
+    @Layout("Obras Disponibles", ObrasDisponiblesContent(obras))
 }

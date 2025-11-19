@@ -8,7 +8,7 @@ package views
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func ObraForm() templ.Component {
+func ObraFormContent() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -29,7 +29,36 @@ func ObraForm() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<form method=\"POST\" action=\"/obras\"><label>Título <input type=\"text\" name=\"titulo\" required></label> <label>Artista <input type=\"text\" name=\"artista\" required></label> <label>Descripción <textarea name=\"descripcion\"></textarea></label> <label>Precio <input type=\"text\" name=\"precio\" required></label> <label>Estado <select name=\"vendida\"><option value=\"false\">Disponible</option> <option value=\"true\">Vendida</option></select></label> <button type=\"submit\">Agregar obra</button></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html><head><title>Agregar obra</title></head><body><header><nav><a href=\"/\">Inicio</a> <a href=\"exposiciones\">Exposiciones</a> <a href=\"listarObras\">Obras</a> <a href=\"administrar\">Añadir</a></nav></header><h2>Agregar obra</h2><main><form id=\"formUsuario\" method=\"POST\" action=\"/obras\"><label for=\"titulo\">Titulo:</label> <input type=\"text\" id=\"titulo\" name=\"titulo\" required> <label for=\"artista\">Artista:</label> <input type=\"text\" id=\"artista\" name=\"artista\" required> <label for=\"descripcion\">Descripcion:</label> <input type=\"text\" id=\"descripcion\" name=\"descripcion\" required> <label for=\"precio\">Precio:</label> <input type=\"text\" id=\"precio\" name=\"precio\" required> <label for=\"vendida\" class=\"checkbox-label\">Vendida: <input type=\"checkbox\" id=\"vendida\" name=\"vendida\"></label> <button type=\"submit\">Enviar</button></form></main></body></html>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func ObraForm() templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var2 == nil {
+			templ_7745c5c3_Var2 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = Layout("Agregar Nueva Obra", ObraFormContent()).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

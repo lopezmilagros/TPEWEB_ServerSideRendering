@@ -31,7 +31,7 @@ func ObraPageContent(obras []models.Obra) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html><head><title>Inicio</title><link rel=\"stylesheet\" href=\"styles.css\"></head><body><header><nav><a href=\"/\">Inicio</a> <a href=\"exposiciones\">Exposiciones</a> <a href=\"listarObras\">Obras</a> <a href=\"administrar\">Añadir</a></nav></header><h1>BURDEUS</h1><h5>La galería de arte que estabas buscando</h5><img src=\"Imagenes/principal.jpg\" alt=\"Imagen principal\"><h2>Catálogo de obras: </h2>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html><head><title>Inicio</title><link rel=\"stylesheet\" href=\"styles.css\"></head><body><header><nav><a href=\"/\">Inicio</a> <a href=\"exposiciones\">Exposiciones</a> <a href=\"listarObras\">Obras</a> <a href=\"administrar\">Añadir</a></nav></header><h1>BURDEUS</h1><h5>La galería de arte que estabas buscando</h5><img src=\"/static/Imagenes/principal.jpg\" alt=\"Imagen principal\"><h2>Catálogo de obras: </h2>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -112,7 +112,7 @@ func ListarObras(obras []models.Obra) templ.Component {
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(obra.Titulo)
 			if templ_7745c5c3_Err != nil {
-				return	templ.Error{Err: templ_7745c5c3_Err, FileName: `views/obras.templ`, Line: 49, Col: 29}
+				return	templ.Error{Err: templ_7745c5c3_Err, FileName: `views/obras.templ`, Line: 50, Col: 29}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -125,7 +125,7 @@ func ListarObras(obras []models.Obra) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(obra.Descripcion)
 			if templ_7745c5c3_Err != nil {
-				return	templ.Error{Err: templ_7745c5c3_Err, FileName: `views/obras.templ`, Line: 49, Col: 51}
+				return	templ.Error{Err: templ_7745c5c3_Err, FileName: `views/obras.templ`, Line: 50, Col: 51}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {

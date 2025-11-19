@@ -1,35 +1,51 @@
 package views
 
-templ ObraForm() {
-    <form method="POST" action="/obras">
-        <label>
-            Título
-            <input type="text" name="titulo" required />
-        </label>
+templ ObraFormContent() {
+    <!DOCTYPE html>
+<html>
+  <head>
+    <title>Agregar obra</title>
+  </head>
 
-        <label>
-            Artista
-            <input type="text" name="artista" required />
-        </label>
+  <body>
+    <header>
+      <nav>
+        <a href="/">Inicio</a>
+        <a href="exposiciones">Exposiciones</a>
+        <a href="listarObras">Obras</a>
+        <a href="administrar">Añadir</a>
+      </nav>
+    </header>
+    <h2>Agregar obra</h2>
+<main>
+    <form id="formUsuario" method="POST" action="/obras">
+      <label for="titulo">Titulo:</label>
+      <input type="text" id="titulo" name="titulo" required>
 
-        <label>
-            Descripción
-            <textarea name="descripcion"></textarea>
-        </label>
+      <label for="artista">Artista:</label>
+      <input type="text" id="artista" name="artista" required>
 
-        <label>
-            Precio
-            <input type="text" name="precio" required />
-        </label>
+      <label for="descripcion">Descripcion:</label>
+      <input type="text" id="descripcion" name="descripcion" required>
 
-        <label>
-            Estado
-            <select name="vendida">
-                <option value="false">Disponible</option>
-                <option value="true">Vendida</option>
-            </select>
-        </label>
+      <label for="precio">Precio:</label>
+      <input type="text" id="precio" name="precio" required>
 
-        <button type="submit">Agregar obra</button>
+      <label for="vendida" class="checkbox-label">
+        Vendida: <input type="checkbox" id="vendida" name="vendida">
+      </label>
+
+      <button type="submit">Enviar</button>
     </form>
+</main>
+   
+  </body>
+</html>
+
+}
+
+templ ObraForm() {
+
+    @Layout("Agregar Nueva Obra", ObraFormContent())
+
 }

@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"strconv"
 
 	db "galeriadearte.com/base_de_datos/db/sqlc"
 	"galeriadearte.com/models"
@@ -20,23 +21,58 @@ func ObraHandler(q *db.Queries) *ObraHandlerType {
 
 // Router principal para este handler
 func (h *ObraHandlerType) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Println("➡️ Entró a ServeHTTP con ruta:", r.URL.Path, "método:", r.Method)
+	log.Println("Entró a ServeHTTP con ruta:", r.URL.Path, "método:", r.Method)
 
 	switch {
 	case r.URL.Path == "/" && r.Method == http.MethodGet:
 		h.inicio(w, r)
-	case r.URL.Path == "/administrar" && r.Method == http.MethodPost:
+	case r.URL.Path == "/obras" && r.Method == http.MethodPost:
 		h.CrearObra(w, r)
+	case r.URL.Path == "/administrar" && r.Method == http.MethodGet:
+		h.formularioAgregarObra(w, r)
 	case r.URL.Path == "/exposiciones" && r.Method == http.MethodGet:
 		{ //lista obras disponibles
-			h.inicio(w, r)
+			h.listarObrasDisponibles(w, r)
 		}
 	case r.URL.Path == "/listarObras" && r.Method == http.MethodGet:
 		{ //lista todas las obras
 			h.listarObras(w, r)
 		}
+	case r.URL.Path == "/eliminar" && r.Method == http.MethodPost:
+		h.deleteObra(w, r)
 	default:
 		http.NotFound(w, r)
+	}
+}
+
+func (h *ObraHandlerType) formularioAgregarObra(w http.ResponseWriter, r *http.Request) {
+	if err := views.ObraForm().Render(r.Context(), w); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+
+}
+
+func (h *ObraHandlerType) listarObrasDisponibles(w http.ResponseWriter, r *http.Request) {
+	obras, err := h.queries.ListAvailableObras(r.Context())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	var obrasResponse []models.Obra
+	for _, obra := range obras {
+		obrasResponse = append(obrasResponse, models.Obra{
+			ID:          obra.ID,
+			Titulo:      obra.Titulo,
+			Artista:     obra.Artista,
+			Descripcion: nullStringToString(obra.Descripcion),
+			Precio:      obra.Precio,
+			Vendida:     nullBoolToString(obra.Vendida),
+		})
+	}
+
+	if err := views.ObrasDisponibles(obrasResponse).Render(r.Context(), w); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -61,6 +97,7 @@ func (h *ObraHandlerType) inicio(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Render de la página principal con templ
+	// El render de templ escribe directamente en el http.ResponseWriter.
 	if err := views.ObraPage(obrasResponse).Render(r.Context(), w); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -117,11 +154,9 @@ func (h *ObraHandlerType) CrearObra(w http.ResponseWriter, r *http.Request) {
 		nuevaObra.Descripcion = sql.NullString{String: "", Valid: false}
 	}
 
-	// Vendida: "true" / "false" desde el <select>
-	if vendidaStr == "true" {
-		nuevaObra.Vendida = sql.NullBool{Bool: true, Valid: true}
-	} else {
-		nuevaObra.Vendida = sql.NullBool{Bool: false, Valid: true}
+	nuevaObra.Vendida = sql.NullBool{
+		Bool:  vendidaStr != "",
+		Valid: true,
 	}
 
 	_, err := h.queries.CreateObra(r.Context(), nuevaObra)
@@ -130,10 +165,10 @@ func (h *ObraHandlerType) CrearObra(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("✅ Obra creada correctamente a través del formulario")
+	log.Println("Obra creada correctamente a través del formulario")
 
 	// PRG: redirigir para evitar re-envío del form
-	http.Redirect(w, r, "/", http.StatusSeeOther)
+	http.Redirect(w, r, "/listarObras", http.StatusSeeOther)
 }
 
 // Helpers para convertir NullString / NullBool a string
@@ -152,6 +187,38 @@ func nullBoolToString(nb sql.NullBool) string {
 		return "Disponible"
 	}
 	return "-"
+}
+
+func (h *ObraHandlerType) deleteObra(w http.ResponseWriter, r *http.Request) {
+	log.Println("Borrando obra...")
+
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "Error parseando formulario", http.StatusBadRequest)
+		return
+	}
+
+	idStr := r.FormValue("id")
+	if idStr == "" {
+		http.Error(w, "ID de obra no recibido", http.StatusBadRequest)
+		return
+	}
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		http.Error(w, "ID inválido", http.StatusBadRequest)
+		return
+	}
+
+	//borramos la obra
+	err2 := h.queries.DeleteObra(r.Context(), int32(id))
+	if err2 != nil {
+		http.Error(w, "Failed to delete obra", http.StatusInternalServerError)
+		return
+	}
+	log.Println("Obra borrada correctamente")
+
+	// Redirigimos a la lista de obras
+	http.Redirect(w, r, "/listarObras", http.StatusSeeOther)
 }
 
 /*func (h *ObraHandlerType) obrasDisponibles(w http.ResponseWriter, r *http.Request) {
