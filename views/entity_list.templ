@@ -1,0 +1,54 @@
+package views
+
+import "galeriadearte.com/models"
+
+templ ObraListContent(obras []models.Obra) {
+    <div id="contenedor-obras">
+        if len(obras) == 0 {
+            <p>No hay obras registradas.</p>
+        } else {
+            for _, obra := range obras {
+                <div class="shadowbox">
+                    <h3>{ obra.Titulo }</h3>
+
+                    <p>
+                        <strong>Artista:</strong> { obra.Artista }
+                    </p>
+
+                    if obra.Descripcion != "" {
+                        <p>
+                            <strong>Descripción:</strong> { obra.Descripcion }
+                        </p>
+                    }
+
+                    <p>
+                        <strong>Precio:</strong> { obra.Precio }
+                    </p>
+
+                    <p>{ obra.Vendida }</p>
+
+                    <hr />
+                </div>
+            }
+        }
+    </div>
+}
+
+templ ObraList(obras []models.Obra) {
+    <body>  
+    <header>
+      <nav>
+        <a href="/">Inicio</a>
+        <a href="exposiciones">Exposiciones</a>
+        <a href="listarObras">Obras</a>
+        <a href="administrar">Añadir</a>
+      </nav>
+    </header>
+    <h2>Listado de Obras</h2>  
+  </body>
+    @Layout("Catalogo", ObraListContent(obras))
+}
+
+templ ObraListDisponiblesContent() {
+    
+}

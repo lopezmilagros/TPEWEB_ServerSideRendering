@@ -1,0 +1,35 @@
+package views
+
+templ ObraForm() {
+    <form method="POST" action="/obras">
+        <label>
+            Título
+            <input type="text" name="titulo" required />
+        </label>
+
+        <label>
+            Artista
+            <input type="text" name="artista" required />
+        </label>
+
+        <label>
+            Descripción
+            <textarea name="descripcion"></textarea>
+        </label>
+
+        <label>
+            Precio
+            <input type="text" name="precio" required />
+        </label>
+
+        <label>
+            Estado
+            <select name="vendida">
+                <option value="false">Disponible</option>
+                <option value="true">Vendida</option>
+            </select>
+        </label>
+
+        <button type="submit">Agregar obra</button>
+    </form>
+}

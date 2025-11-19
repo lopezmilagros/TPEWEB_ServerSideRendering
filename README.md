@@ -133,6 +133,10 @@ make down
 ```
 ---
 
+# TPE Parte 5:
+go install github.com/a-h/templ/cmd/templ@latest
+go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
+
 ## Integrantes
 - Milagros Lopez
 - Maria Eugenia Arriaga

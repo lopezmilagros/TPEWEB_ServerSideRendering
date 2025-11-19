@@ -1,6 +1,54 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
+	"log"
+	"net/http"
+
+	db "galeriadearte.com/base_de_datos/db/sqlc"
+	"galeriadearte.com/handlers"
+
+	_ "github.com/lib/pq"
+)
+
+var dbQueries *db.Queries
+
+func main() {
+	//LOGICA DE NEGOCIO
+	// Conexión a la base de datos
+	connStr := "postgresql://milibianeuge:programacionweb@localhost:5432/db?sslmode=disable"
+	dbConn, err := sql.Open("postgres", connStr)
+	if err != nil {
+		log.Fatalf("failed to connect to DB: %v", err)
+	}
+	defer dbConn.Close()
+
+	dbQueries = db.New(dbConn)
+	obrasHandler := handlers.ObraHandler(dbQueries)
+
+	// Puerto
+	port := ":8080"
+	fmt.Printf("Servidor escuchando en http://localhost%s\n", port)
+
+	// Servir archivos estáticos
+	fileServer := http.FileServer(http.Dir("servidor/html"))
+	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
+
+	// Handler principal (templ)
+	http.Handle("/", obrasHandler)
+
+	// Levantar servidor
+	err3 := http.ListenAndServe(port, nil)
+	if err3 != nil {
+		fmt.Printf("Error al iniciar el servidor: %s\n", err)
+	}
+
+}
+
+/*package main
+
+import (
 	"database/sql" // para sql.Open()
 	"encoding/json"
 	"fmt"
@@ -9,9 +57,11 @@ import (
 	"strconv"
 	"strings"
 
+	"galeriadearte.com/handlers"
+
 	_ "github.com/lib/pq"
 
-	sqlc "galeriadearte.com/base_de_datos/db/sqlc"
+	db "galeriadearte.com/base_de_datos/db/sqlc"
 )
 
 type ObraResponse struct {
@@ -23,39 +73,26 @@ type ObraResponse struct {
 	Vendida     string `json:"vendida"`
 }
 
-var dbQueries *sqlc.Queries
+var dbQueries *db.Queries
 
 func main() {
 
 	//LOGICA DE NEGOCIO
 	// Conexión a la base de datos
 	connStr := "postgresql://milibianeuge:programacionweb@localhost:5432/db?sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
+	dbConn, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatalf("failed to connect to DB: %v", err)
 	}
-	defer db.Close()
+	defer dbConn.Close()
 
-	// Rutas
-	http.HandleFunc("/obras", obrasHandler)
-	http.HandleFunc("/obras/", obraHandler)
-	http.HandleFunc("/inicio", inicio)
-	http.HandleFunc("/administrar", administrar)
-	http.HandleFunc("/listarObras", contenedorObras)
-	http.HandleFunc("/exposiciones", exposiciones)
-	http.HandleFunc("/obrasDisponibles", obrasDisponibles)
-
-	dbQueries = sqlc.New(db)
-
-	staticDir := "./html"
-	// Servidor de archivos
-	fs := http.FileServer(http.Dir(staticDir))
-	http.Handle("/", fs)
+	dbQueries = db.New(dbConn)
+	obrasHandler := handlers.ObraHandler(dbQueries)
+	http.Handle("/", obrasHandler)
 
 	// Puerto
 	port := ":8080"
 	fmt.Printf("Servidor escuchando en http://localhost%s\n", port)
-	fmt.Printf("Sirviendo archivos desde: %s\n", staticDir)
 
 	// Levantar servidor
 	err3 := http.ListenAndServe(port, nil)
@@ -146,7 +183,7 @@ func getObras(w http.ResponseWriter, r *http.Request) {
 			Artista:     o.Artista,
 			Descripcion: nullStringToString(o.Descripcion),
 			Precio:      o.Precio,
-			Vendida:     nullBoolToBool(o.Vendida),
+			Vendida:     nullBoolToString(o.Vendida),
 		})
 	}
 	// Convertir a JSON y enviar respuesta
@@ -159,7 +196,7 @@ func nullStringToString(ns sql.NullString) string {
 	return ""
 }
 
-func nullBoolToBool(nb sql.NullBool) string {
+func nullBoolToString(nb sql.NullBool) string {
 	if nb.Valid {
 		if nb.Bool {
 			return "Vendida"
@@ -191,7 +228,7 @@ func createObra(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var nuevaObra sqlc.CreateObraParams
+	var nuevaObra db.CreateObraParams
 	nuevaObra.Titulo = reqobra.Titulo
 	nuevaObra.Artista = reqobra.Artista
 	nuevaObra.Precio = reqobra.Precio
@@ -257,7 +294,7 @@ func updateObra(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var obraPorActualizar sqlc.Obra
+	var obraPorActualizar db.Obra
 	//buscar la obra por id
 	obraPorActualizar, err1 := dbQueries.GetObraById(r.Context(), reqobra.Id)
 	if err1 != nil {
@@ -265,7 +302,7 @@ func updateObra(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var obraActualizada sqlc.UpdateObraParams
+	var obraActualizada db.UpdateObraParams
 
 	obraActualizada.ID = reqobra.Id
 	if reqobra.Titulo != "" {
@@ -337,9 +374,10 @@ func obrasDisponibles(w http.ResponseWriter, r *http.Request) {
 			Artista:     o.Artista,
 			Descripcion: nullStringToString(o.Descripcion),
 			Precio:      o.Precio,
-			Vendida:     nullBoolToBool(o.Vendida),
+			Vendida:     nullBoolToString(o.Vendida),
 		})
 	}
 	// Convertir a JSON y enviar respuesta
 	json.NewEncoder(w).Encode(obrasResponse)
 }
+*/

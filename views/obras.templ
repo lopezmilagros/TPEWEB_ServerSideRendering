@@ -1,0 +1,82 @@
+package views
+
+import "galeriadearte.com/models"
+
+templ ObraPageContent(obras []models.Obra) {
+   <!DOCTYPE html>
+<html>
+  <head>
+    <title>Inicio</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <body>
+    <header>
+      <nav>
+        <a href="/">Inicio</a>
+        <a href="exposiciones">Exposiciones</a>
+        <a href="listarObras">Obras</a>
+        <a href="administrar">Añadir</a>
+      </nav>
+    </header>
+    <h1>BURDEUS</h1>
+    <h5>La galería de arte que estabas buscando</h5>
+    <img
+      src="Imagenes/principal.jpg"
+      alt="Imagen principal"
+    />
+    <h2> Catálogo de obras: </h2>
+    @ObraListContent(obras)
+
+  </body>
+</html>
+}
+
+templ ObraPage(obras []models.Obra) {
+    @Layout("Galería de Arte", ObraPageContent(obras))
+}
+
+
+
+
+/*package views
+
+import "galeriadearte.com/models"
+
+templ ListarObras(obras []models.Obra) {
+    <ul>
+        for _, obra := range obras {
+            <li>{ obra.Titulo} - { obra.Descripcion }</li>
+        }
+    </ul>
+}
+
+templ ObraPage(obras []models.Obra) {
+    <html>
+    <head>
+        <title>Inicio</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+
+    <body>
+        <header>
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="exposiciones">Exposiciones</a>
+            <a href="listarObras">Obras</a>
+            <a href="administrar">Añadir</a>
+        </nav>
+        </header>
+        <h1>BURDEUS</h1>
+        <h5>La galería de arte que estabas buscando</h5>
+        <img
+        src="Imagenes/principal.jpg"
+        alt="Imagen principal"
+        />
+        <h2> Catálogo de obras: </h2>
+        <div id="contenedor-obras"> </div>
+        @ListarObras(obras)
+
+    </body>
+    </html>
+}*/

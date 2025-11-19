@@ -4,7 +4,7 @@ up:
 	cd base_de_datos && sudo docker compose up --build -d 
 
 	@echo "Levantando el servidor Go..."
-	cd servidor && go run .  > logs.txt 2>&1 &
+	go run .  > logs.txt 2>&1 &
 
 	@echo "Generando codigo SQLC..."
 	cd base_de_datos && sqlc generate
@@ -19,3 +19,9 @@ down:
 
 	@echo "Deteniendo servidor Go..."
 	cd servidor && kill -9 $(shell sudo lsof -t -i :8080)
+
+aux: 
+	make down
+	rm views/*_templ.go
+	templ generate
+	make up
