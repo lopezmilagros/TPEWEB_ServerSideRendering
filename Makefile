@@ -1,7 +1,4 @@
 #Levantar el servidor y la base de datos
-# rm views/*_templ.go
-export PATH := $(PATH):/home/eugenia/go/bin
-
 
 up:
 	@echo "Levantando la base de datos..."
