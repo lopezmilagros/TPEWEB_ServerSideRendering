@@ -40,39 +40,18 @@ templ ObraListContent(obras []models.Obra) {
 }
 
 templ ObraList(obras []models.Obra) {
-    <body>  
-    <header>
-      <nav>
-        <a href="/">Inicio</a>
-        <a href="exposiciones">Exposiciones</a>
-        <a href="listarObras">Obras</a>
-        <a href="administrar">Añadir</a>
-      </nav>
-    </header>
-    <h2>Listado de Obras</h2>  
-  </body>
-    @Layout("Catalogo", ObraListContent(obras))
+    @Layout("Listado de obras", ObraListContent(obras))
 }
 
 templ ObrasDisponiblesContent(obras []models.Obra) {
-    <header>
-        <nav>
-            <a href="/">Inicio</a>
-            <a href="/exposiciones">Exposiciones</a>
-            <a href="/listarObras">Obras</a>
-            <a href="/administrar">Añadir</a>
-        </nav>
-    </header>
     <div class="banner">
         <img src="/static/Imagenes/exposicion.jpg" alt="Imagen de exposiciones" />
     </div>
-
-    <h2>Obras disponibles</h2>
-
+    <h2> Catálogo disponible </h2>
     /*uso lo mismo que para listar obras*/
     @ObraListContent(obras)  
 }
 
 templ ObrasDisponibles(obras []models.Obra) {
-    @Layout("Obras Disponibles", ObrasDisponiblesContent(obras))
+    @Layout("", ObrasDisponiblesContent(obras))
 }

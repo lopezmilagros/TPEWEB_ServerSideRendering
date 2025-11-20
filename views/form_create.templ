@@ -8,15 +8,6 @@ templ ObraFormContent() {
   </head>
 
   <body>
-    <header>
-      <nav>
-        <a href="/">Inicio</a>
-        <a href="exposiciones">Exposiciones</a>
-        <a href="listarObras">Obras</a>
-        <a href="administrar">Añadir</a>
-      </nav>
-    </header>
-    <h2>Agregar obra</h2>
 <main>
     <form id="formUsuario" method="POST" action="/obras">
       <label for="titulo">Titulo:</label>
@@ -46,6 +37,6 @@ templ ObraFormContent() {
 
 templ ObraForm() {
 
-    @Layout("Agregar Nueva Obra", ObraFormContent())
+    @Layout("Agregar nueva obra", ObraFormContent())
 
 }

@@ -1,0 +1,35 @@
+package views
+
+import "galeriadearte.com/models"
+
+templ ActualizarObraPageContent(obras []models.Obra) {
+<div class="actualizar-container">
+
+            <!-- LISTA IZQUIERDA -->
+            <div class="columna-lista">
+                <h3 class="subtitulo-seccion">Obras:</h3>
+                <div class="lista-scroll">
+                    if len(obras) == 0 {
+                        <p>No hay obras cargadas.</p>
+                    } else {
+                        for _, obra := range obras {
+                            <div class="tarjeta-obra">
+                                <h4>{ obra.Titulo }</h4>
+                                <p><strong>ID:</strong> { obra.ID }</p>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+
+            <!-- FORMULARIO DERECHA -->
+            <div class="columna-formulario">
+            <p>Ingrese el id y los datos de la obra que desea actualizar</p>
+                @ObraFormUpdateContent()
+            </div>
+</div>
+}
+
+templ ActualizarObraPage(obras []models.Obra) {
+    @Layout("Actualizar obra", ActualizarObraPageContent(obras))
+}

@@ -4,19 +4,19 @@ Clonar el repositorio de git desde la terminal:
 
 1. Crear una carpeta local en donde se guardará el repositorio
 
-2. .Abrir una nueva terminal y Navegar hasta la carpeta creada con el comando: 'cd/ < ruta >'
+2. Abrir una nueva terminal y Navegar hasta la carpeta creada con el comando: 'cd/ < ruta >'
 
 3. Ejecute el siguiente comando:
+
 ```bash
-git clone https://github.com/arriagaeugenia/Tp_programacion_web
+https://github.com/lopezmilagros/TPEWEB_ServerSideRendering.git
 ```
 
 ---
-# TPE Parte 3: Logica de negocio
 
-Este módulo implementa la **logica de negocio** de la aplicación conectando la base de datos con el servidor.
+# TPE Parte 5: Server Side Rendering
 
----
+Este módulo implementa los **endpoints** de la aplicación comunicandose con el cliente a traves de go, sin pasar por JavaScript.
 
 ## Estructura
 
@@ -27,118 +27,118 @@ base_de_datos/
 │   ├── queries/      # Consultas SQL
 │   ├── schema/       # Esquema de la base de datos
 │   └── sqlc/         # Código Go generado automáticamente
-servidor/
-├── html/             # Archivos estáticos 
-│   ├── index.html
-│   └── Imagenes/
-└── main.go           # Código principal del servidor HTTP
-go.mod            
+models/
+├── obras.go                    # Entidades del negocio: Obra
+views/                          # Capa de presentacion: .templ: plantillas originales, .go codigo generdo
+├── entity_form.templ           # Formulario
+├── entity_form_templ.go
+├── entity_list.templ           # Lista de obras
+├── entity_list_templ.go
+├── obras.templ                 # Inicio
+├── obras_templ.go
+├── layout.templ                # Renderizacion
+├── layout_templ.go
+├── styles.css
+handlers/
+├── obras.go                    # Manejo de rutas. Funciones para cada ruta.
+servidor/html
+├── styles.css                  # Estilos de los componentes
+├── imagenes/ 
+go.mod
 go.sum
+main.go               # Código principal del servidor y conexion con la base de datos.
 Makefile              # Archivo para levantar, testear y bajar la pagina
-request.hurl          # Herramienta Hurl para testear los endpoints de la pagina.
 
 ```
 
 ---
+
 ## Requisitos
+
+Las instrucciones están escritas para Debian/Ubuntu. En caso de usar otro sistema operativo, buscá los comandos específicos para tu sistema.
+
 ### Docker para linux:
+
 Tener instalado Docker desde la pagina: https://docs.docker.com/compose/install/
-O en la terminal, instalarlo con el comando: 
+O en la terminal, instalarlo con el comando:
 
 ```bash
 sudo apt update && sudo apt install docker.io docker-compose -y
 ```
+
 Esta instalacion funciona para Ubuntu y Debian
 
 ### SQLC para linux:
+Abrir la terminal y ejecutar:
+
 ```bash
 sudo snap install sqlc
 ```
 
-### Hurl para linux:
-    Abrir la terminal y ejecutar:
+### Make
+Abrir la terminal y ejecutar:
 
 ```bash
-$ INSTALL_DIR=/tmp
-$ VERSION=7.0.0
-$ curl --silent --location https://github.com/Orange-OpenSource/hurl/releases/download/$VERSION/hurl-$VERSION-x86_64-unknown-linux-gnu.tar.gz | tar xvz -C $INSTALL_DIR
-$ export PATH=$INSTALL_DIR/hurl-$VERSION-x86_64-unknown-linux-gnu/bin:$PATH
+sudo apt install make
+```
+
+### Templ
+Abrir la terminal y ejecutar:
+
+```bash
+go install github.com/a-h/templ/cmd/templ@latest
 ```
 
 ## Uso
 
-
 ### 1. Ejecutar el servidor y la base de datos
-Desde la carpeta `TP_PROGRAMACION_WEB/` correr: 
+
+Desde la carpeta `TPEWEB_ServerSideRendering/` correr:
 
 ```bash
 make up
 ```
----
 
-### 2. Testear funcionamiento de endpoints
-
-```bash
-make test
-```
----
-Luego ir al archivo logs.txt para verificar el correcto funcionamiento del test. Deberias ver algo como esto:
-```
-Servidor escuchando en http://localhost:8080
-Sirviendo archivos desde: ./html
-2025/10/28 17:23:36 Creando una nueva obra...
-2025/10/28 17:23:36 Obra creada exitosamente.
-2025/10/28 17:23:36 Actualizando obra...
-2025/10/28 17:23:36 Obra actualizada exitosamente.
-2025/10/28 17:23:36 Borrando obra...
-2025/10/28 17:23:36 Obra borrada exitosamente.
-```
-
-### 3. Bajar el servidor y la base de datos
-
-```bash
-make down
-```
----
-
-# TPE Parte 4: La capa de presentacion
-### 1. Ejecutar el servidor y la base de datos
-Desde la carpeta `TP_PROGRAMACION_WEB/` correr: 
-
-```bash
-make up
-```
 ---
 
 ### 2. Acceder a la aplicación
-Abrir en el navegador:  http://localhost:8080
+
+Abrir en el navegador: http://localhost:8080
 
 ### 3. Navegar en la aplicación web:
 
-#### -Inicio: 
-En el inicio se encuentra desplegada el catálogo de todas las obras de la galeria, en cada una de ellas se encuentra un botón de eliminar.
+#### -Inicio:
+
+En el inicio se encuentra desplegada el catálogo de todas las obras de la galeria.
 
 #### -Obras:
+
 Acá se encuentra el mismo listado de obras que en el inicio.
 
-#### -Añadir:
-Acá se encuentra el formulario para agregar obras, luego de agregar una obra te redirige a la sección Obras de la aplicación actualizada.
-
 #### -Exposición:
+
 Acá se encuentran listadas las obras disponibles de la galería.
 
+#### -Añadir:
+
+Acá se encuentra el formulario para agregar obras, luego de agregar una obra te redirige a la sección Obras de la aplicación actualizada.
+
+#### -Actualizar:
+
+Aca se encuentra la lista de obras con su id, para actualizar una obra se debe indicar el id en el formulario y completar los campos que quieras actualizar. Luego la pagina se redirige a Obras.
+
+- Siempre que se listan las obras, está la opcion de eliminarla. Al eliminarla, la pagina se redirige a Obras, para que se muestre la lista ahora sin la obra eliminada.
+
 ### 4. Bajar la aplicacion
+
 ```bash
 make down
 ```
+
 ---
 
-# TPE Parte 5:
-go install github.com/a-h/templ/cmd/templ@latest
-go install github.com/kyleconroy/sqlc/cmd/sqlc@latest
-
 ## Integrantes
+
 - Milagros Lopez
 - Maria Eugenia Arriaga
 - Bianca Rizzalli
-

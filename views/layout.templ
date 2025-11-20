@@ -5,16 +5,24 @@ import t "github.com/a-h/templ"
 templ Layout(title string, contents t.Component) {
     <!DOCTYPE html>
     <html lang="es">
-        <head>
-            <meta charset="UTF-8" />
-            <title>{ title }</title>
-            <link rel="stylesheet" href="/static/styles.css" />
-        </head>
-        <body>
-            <main class="container">
+    <head>
+        <meta charset="UTF-8" />
+        <title>{ title }</title>
+        <link rel="stylesheet" href="/static/styles.css" />
+    </head>
+    <body>
+        <header>
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="exposiciones">Exposiciones</a>
+            <a href="listarObras">Obras</a>
+            <a href="agregar">Añadir</a>
+            <a href="actualizar">Actualizar</a>
+        </nav>
+        </header>
+            <h2>{title}</h2>
                 @contents  
-            </main>
-        </body>
+    </body>
     </html>
 }
 

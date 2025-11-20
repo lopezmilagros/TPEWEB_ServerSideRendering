@@ -11,14 +11,6 @@ templ ObraPageContent(obras []models.Obra) {
   </head>
 
   <body>
-    <header>
-      <nav>
-        <a href="/">Inicio</a>
-        <a href="exposiciones">Exposiciones</a>
-        <a href="listarObras">Obras</a>
-        <a href="administrar">Añadir</a>
-      </nav>
-    </header>
     <h1>BURDEUS</h1>
     <h5>La galería de arte que estabas buscando</h5>
     <img
@@ -26,7 +18,6 @@ templ ObraPageContent(obras []models.Obra) {
       alt="Imagen principal"
     />
     
-    <h2> Catálogo de obras: </h2>
     @ObraListContent(obras)
 
   </body>
@@ -34,7 +25,7 @@ templ ObraPageContent(obras []models.Obra) {
 }
 
 templ ObraPage(obras []models.Obra) {
-    @Layout("Galería de Arte", ObraPageContent(obras))
+    @Layout("", ObraPageContent(obras))
 }
 
 

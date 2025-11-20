@@ -1,9 +1,14 @@
 #Levantar el servidor y la base de datos
+# rm views/*_templ.go
+export PATH := $(PATH):/home/eugenia/go/bin
+
+
 up:
 	@echo "Levantando la base de datos..."
 	cd base_de_datos && docker compose up --build -d 
 
 	@echo "Borrando templ viejos y regenerando..."
+	
 	rm views/*_templ.go
 	templ generate
 
