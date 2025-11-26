@@ -44,14 +44,14 @@ func Layout(title string, contents t.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><link rel=\"stylesheet\" href=\"/static/styles.css\"></head><body><header><nav><a href=\"/\">Inicio</a> <a href=\"exposiciones\">Exposiciones</a> <a href=\"listarObras\">Obras</a> <a href=\"agregar\">Añadir</a> <a href=\"actualizar\">Actualizar</a></nav></header><h2>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><link rel=\"stylesheet\" href=\"/static/styles.css\"><!-- HTMX --><script src=\"https://unpkg.com/htmx.org@1.9.10\" integrity=\"sha384-...\" crossorigin=\"anonymous\">\n        </script></head><body><header><nav><a href=\"/\">Inicio</a> <a href=\"exposiciones\">Exposiciones</a> <a href=\"listarObras\">Obras</a> <a href=\"agregar\">Añadir</a> <a href=\"actualizar\">Actualizar</a></nav></header><h2>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout.templ`, Line: 23, Col: 22}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/layout.templ`, Line: 29, Col: 22}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {

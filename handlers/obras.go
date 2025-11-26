@@ -2,10 +2,10 @@ package handlers
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	db "galeriadearte.com/base_de_datos/db/sqlc"
 	"galeriadearte.com/models"
@@ -41,10 +41,13 @@ func (h *ObraHandlerType) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		{ //lista todas las obras
 			h.listarObras(w, r)
 		}
-	case r.URL.Path == "/eliminar" && r.Method == http.MethodPost:
-		h.deleteObra(w, r)
+	/*case r.URL.Path == "/eliminar" && r.Method == http.MethodPost:
+		h.deleteObra(w, r)*/
 	case r.URL.Path == "/update" && r.Method == http.MethodPost:
 		h.updateObra(w, r)
+	case strings.HasPrefix(r.URL.Path, "/obras/") && r.Method == http.MethodDelete:
+    h.deleteObraHTMX(w, r)
+	
 	default:
 		http.NotFound(w, r)
 	}
@@ -158,7 +161,6 @@ func (h *ObraHandlerType) listarObras(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// POST
 func (h *ObraHandlerType) CrearObra(w http.ResponseWriter, r *http.Request) {
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "Error parseando formulario", http.StatusBadRequest)
@@ -194,10 +196,31 @@ func (h *ObraHandlerType) CrearObra(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("Obra creada correctamente a través del formulario")
+	log.Println("Obra creada correctamente a través del formulario", created)
 
-	// Usamos el fmt y el created id para luego en el hurl capturar el id y eliminar la obra creada
-	http.Redirect(w, r, fmt.Sprintf("/listarObras?obra_id=%d", created.ID), http.StatusSeeOther)
+	//volvemos a consultar la lista completa
+	obras, err := h.queries.ListObras(r.Context())
+    if err != nil {
+        http.Error(w, "Error listando obras", http.StatusInternalServerError)
+        return
+    }
+
+	//Convertimos a modelos adecuado y luego solo devolvemos el fragmeto de la lista, no el layout
+    var obrasResponse []models.Obra
+    for _, obra := range obras {
+        obrasResponse = append(obrasResponse, models.Obra{
+            ID:          obra.ID,
+            Titulo:      obra.Titulo,
+            Artista:     obra.Artista,
+            Descripcion: nullStringToString(obra.Descripcion),
+            Precio:      obra.Precio,
+            Vendida:     nullBoolToString(obra.Vendida),
+        })
+    }
+
+    if err := views.ObraListContent(obrasResponse).Render(r.Context(), w); err != nil {
+        http.Error(w, err.Error(), http.StatusInternalServerError)
+    }
 }
 
 func nullStringToString(ns sql.NullString) string {
@@ -217,7 +240,26 @@ func nullBoolToString(nb sql.NullBool) string {
 	return "-"
 }
 
-func (h *ObraHandlerType) deleteObra(w http.ResponseWriter, r *http.Request) {
+func (h *ObraHandlerType) deleteObraHTMX(w http.ResponseWriter, r *http.Request) {
+    parts := strings.Split(r.URL.Path, "/")
+    idStr := parts[len(parts)-1]
+
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        http.Error(w, "ID inválido", http.StatusBadRequest)
+        return
+    }
+
+    err = h.queries.DeleteObra(r.Context(), int32(id))
+    if err != nil {
+        http.Error(w, "Error eliminando obra", 500)
+        return
+    }
+
+    w.WriteHeader(http.StatusOK) // respuesta vacía
+}
+
+/*func (h *ObraHandlerType) deleteObra(w http.ResponseWriter, r *http.Request) {
 	log.Println("Borrando obra...")
 
 	if err := r.ParseForm(); err != nil {
@@ -247,7 +289,7 @@ func (h *ObraHandlerType) deleteObra(w http.ResponseWriter, r *http.Request) {
 
 	// Redirigimos a la lista de obras
 	http.Redirect(w, r, "/listarObras", http.StatusSeeOther)
-}
+}*/
 
 func (h *ObraHandlerType) updateObra(w http.ResponseWriter, r *http.Request) {
 	log.Println("Actualizando obra...")

@@ -29,7 +29,7 @@ func ObraFormContent() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html><head><title>Agregar obra</title></head><body><main><form id=\"formUsuario\" method=\"POST\" action=\"/obras\"><label for=\"titulo\">Titulo:</label> <input type=\"text\" id=\"titulo\" name=\"titulo\" required> <label for=\"artista\">Artista:</label> <input type=\"text\" id=\"artista\" name=\"artista\" required> <label for=\"descripcion\">Descripcion:</label> <input type=\"text\" id=\"descripcion\" name=\"descripcion\" required> <label for=\"precio\">Precio:</label> <input type=\"text\" id=\"precio\" name=\"precio\" required> <label for=\"vendida\" class=\"checkbox-label\">Vendida: <input type=\"checkbox\" id=\"vendida\" name=\"vendida\"></label> <button type=\"submit\">Enviar</button></form></main></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main><form id=\"formUsuario\" hx-post=\"/obras\" hx-target=\"#contenedor-obras\" hx-swap=\"outerHTML\"><label for=\"titulo\">Titulo:</label> <input type=\"text\" id=\"titulo\" name=\"titulo\" required> <label for=\"artista\">Artista:</label> <input type=\"text\" id=\"artista\" name=\"artista\" required> <label for=\"descripcion\">Descripcion:</label> <input type=\"text\" id=\"descripcion\" name=\"descripcion\"> <label for=\"precio\">Precio:</label> <input type=\"text\" id=\"precio\" name=\"precio\" required> <label>Vendida: <input type=\"checkbox\" id=\"vendida\" name=\"vendida\"></label> <button type=\"submit\">Enviar</button></form></main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

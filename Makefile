@@ -2,12 +2,13 @@
 
 up:
 	@echo "Levantando la base de datos..."
-	cd base_de_datos && docker compose up --build -d 
+	cd base_de_datos && docker-compose up --build -d 
 
 	@echo "Borrando templ viejos y regenerando..."
 	
-	rm views/*_templ.go
-	templ generate
+
+	~/go/bin/templ generate
+
 
 	@echo "Levantando el servidor Go..."
 	go run .  > logs.txt 2>&1 &
