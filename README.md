@@ -9,14 +9,14 @@ Clonar el repositorio de git desde la terminal:
 3. Ejecute el siguiente comando:
 
 ```bash
-https://github.com/lopezmilagros/TPEWEB_ServerSideRendering.git
+git clone https://github.com/lopezmilagros/TPEWEB_ServerSideRendering.git
 ```
 
 ---
 
-# TPE Parte 5: Server Side Rendering
+# TPE Parte 6: Interfaces Reactivas con HTMX
 
-Este módulo implementa los **endpoints** de la aplicación comunicandose con el cliente a traves de go, sin pasar por JavaScript.
+Implementación de interfaces reactivas utilizando HTMX sobre un backend en Go. Se modificó el flujo tradicional de petición-redirección para utilizar intercambio de fragmentos HTML, logrando que la creación, eliminación y actualizacion de registros se refleje instantáneamente en la interfaz sin refrescar el navegador.
 
 ## Estructura
 
@@ -43,7 +43,7 @@ handlers/
 ├── obras.go                    # Manejo de rutas. Funciones para cada ruta.
 servidor/html
 ├── styles.css                  # Estilos de los componentes
-├── imagenes/ 
+├── imagenes/
 go.mod
 go.sum
 main.go               # Código principal del servidor y conexion con la base de datos.
@@ -69,6 +69,7 @@ sudo apt update && sudo apt install docker.io docker-compose -y
 Esta instalacion funciona para Ubuntu y Debian
 
 ### SQLC para linux:
+
 Abrir la terminal y ejecutar:
 
 ```bash
@@ -76,6 +77,7 @@ sudo snap install sqlc
 ```
 
 ### Make
+
 Abrir la terminal y ejecutar:
 
 ```bash
@@ -83,6 +85,7 @@ sudo apt install make
 ```
 
 ### Templ
+
 Abrir la terminal y ejecutar:
 
 ```bash
@@ -107,27 +110,27 @@ Abrir en el navegador: http://localhost:8080
 
 ### 3. Navegar en la aplicación web:
 
-#### -Inicio:
+#### Inicio:
 
 En el inicio se encuentra desplegada el catálogo de todas las obras de la galeria.
 
-#### -Obras:
+#### Obras:
 
 Acá se encuentra el mismo listado de obras que en el inicio.
 
-#### -Exposición:
+#### Exposición:
 
-Acá se encuentran listadas las obras disponibles de la galería.
+Se listan las obras disponibles de la galería.
 
-#### -Añadir:
+#### Añadir:
 
-Acá se encuentra el formulario para agregar obras, luego de agregar una obra te redirige a la sección Obras de la aplicación actualizada.
+Se renderiza el formulario para agregar obras, luego de agregar una obra se renderizara la nueva entidad automaticamente en la lista de obras.
 
-#### -Actualizar:
+#### Actualizar:
 
-Aca se encuentra la lista de obras con su id, para actualizar una obra se debe indicar el id en el formulario y completar los campos que quieras actualizar. Luego la pagina se redirige a Obras.
+Aca se encuentra la lista de obras con su id, para actualizar una obra se debe indicar el id en el formulario y completar los campos que quieras actualizar. El resultado se vera atomaticamente en la pagina sin ser recargada.
 
-- Siempre que se listan las obras, está la opcion de eliminarla. Al eliminarla, la pagina se redirige a Obras, para que se muestre la lista ahora sin la obra eliminada.
+- Siempre que se listan las obras, está la opcion de eliminarla. Al eliminarla desaparece automaticamente de la ista de obras sin tener que recargar la pagina.
 
 ### 4. Bajar la aplicacion
 
