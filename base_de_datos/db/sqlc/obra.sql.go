@@ -117,6 +117,7 @@ func (q *Queries) ListAvailableObras(ctx context.Context) ([]Obra, error) {
 const listObras = `-- name: ListObras :many
 SELECT id, titulo, descripcion, artista, fecha_ingreso, precio, vendida            
 FROM obra
+ORDER BY id DESC
 `
 
 func (q *Queries) ListObras(ctx context.Context) ([]Obra, error) {

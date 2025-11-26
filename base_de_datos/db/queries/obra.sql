@@ -10,7 +10,8 @@ WHERE id = $1;
 
 -- name: ListObras :many
 SELECT *            
-FROM obra;
+FROM obra
+ORDER BY id DESC;
 
 -- name: UpdateObra :exec
 UPDATE obra

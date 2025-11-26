@@ -1,7 +1,12 @@
 package views
 
 templ ObraFormUpdateContent() {
-        <form id="formulario" method="POST" action="/update">
+        <form id="formulario"
+            method="POST"
+            hx-post="/update"
+            hx-target="#actualizar-container"
+            hx-swap="outerHTML">
+
             <label for="id">ID:</label>
             <input type="text" id="id" name="id" required />
 
@@ -15,7 +20,7 @@ templ ObraFormUpdateContent() {
             <input type="text" id="descripcion" name="descripcion" />
 
             <label for="precio">Precio:</label>
-            <input type="text" id="precio" name="precio" />
+            <input type="number" id="precio" name="precio" />
 
             <label for="vendida" class="checkbox-label">
                 Vendida:
@@ -25,4 +30,6 @@ templ ObraFormUpdateContent() {
             <button type="submit">Enviar</button>
         </form>
 }
+
+
 

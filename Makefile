@@ -2,12 +2,10 @@
 
 up:
 	@echo "Levantando la base de datos..."
-	cd base_de_datos && docker-compose up --build -d 
+	cd base_de_datos && docker-compose up --build -d 	
 
-	@echo "Borrando templ viejos y regenerando..."
-	
-
-	~/go/bin/templ generate
+	@echo "Generando archivos.templ"
+	templ generate
 
 
 	@echo "Levantando el servidor Go..."
@@ -15,10 +13,6 @@ up:
 
 	@echo "Generando codigo SQLC..."
 	cd base_de_datos && sqlc generate
-
-test:
-	@echo "Ejecutando pruebas Hurl..."
-	hurl --test requests.hurl 
 
 down:
 	@echo "Deteniendo la base de datos..."

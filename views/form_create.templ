@@ -1,9 +1,14 @@
 package views
 
-templ ObraFormContent() {
+import "galeriadearte.com/models"
+
+/*Inputs del formulario*/
+templ ObraFormInLine() {
     <main>
         <form 
             id="formUsuario"
+            method="POST"
+            action="/obras"
             hx-post="/obras"
             hx-target="#contenedor-obras"
             hx-swap="outerHTML"
@@ -18,7 +23,7 @@ templ ObraFormContent() {
           <input type="text" id="descripcion" name="descripcion">
 
           <label for="precio">Precio:</label>
-          <input type="text" id="precio" name="precio" required>
+          <input type="number" id="precio" name="precio" required>
 
           <label>
             Vendida: <input type="checkbox" id="vendida" name="vendida">
@@ -29,9 +34,17 @@ templ ObraFormContent() {
     </main>
 }
 
+/*Renderiza el formulario y listado de obras*/
+templ ObraFormContent(obras []models.Obra){
+  <main>
+    @ObraFormInLine()
+    @ObraListContent(obras)
 
-templ ObraForm() {
+  </main>  
+}
 
-    @Layout("Agregar nueva obra", ObraFormContent())
+/*Renderiza el layout y le manda a que renderice el formulario y la lista*/
+templ ObraForm(obras []models.Obra) {
+    @Layout("Agregar nueva obra", ObraFormContent(obras))
 
 }

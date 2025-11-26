@@ -8,7 +8,11 @@ package views
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-func ObraFormContent() templ.Component {
+import "galeriadearte.com/models"
+
+/*Inputs del formulario*/
+
+func ObraFormInLine() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -29,7 +33,7 @@ func ObraFormContent() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main><form id=\"formUsuario\" hx-post=\"/obras\" hx-target=\"#contenedor-obras\" hx-swap=\"outerHTML\"><label for=\"titulo\">Titulo:</label> <input type=\"text\" id=\"titulo\" name=\"titulo\" required> <label for=\"artista\">Artista:</label> <input type=\"text\" id=\"artista\" name=\"artista\" required> <label for=\"descripcion\">Descripcion:</label> <input type=\"text\" id=\"descripcion\" name=\"descripcion\"> <label for=\"precio\">Precio:</label> <input type=\"text\" id=\"precio\" name=\"precio\" required> <label>Vendida: <input type=\"checkbox\" id=\"vendida\" name=\"vendida\"></label> <button type=\"submit\">Enviar</button></form></main>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<main><form id=\"formUsuario\" method=\"POST\" action=\"/obras\" hx-post=\"/obras\" hx-target=\"#contenedor-obras\" hx-swap=\"outerHTML\"><label for=\"titulo\">Titulo:</label> <input type=\"text\" id=\"titulo\" name=\"titulo\" required> <label for=\"artista\">Artista:</label> <input type=\"text\" id=\"artista\" name=\"artista\" required> <label for=\"descripcion\">Descripcion:</label> <input type=\"text\" id=\"descripcion\" name=\"descripcion\"> <label for=\"precio\">Precio:</label> <input type=\"number\" id=\"precio\" name=\"precio\" required> <label>Vendida: <input type=\"checkbox\" id=\"vendida\" name=\"vendida\"></label> <button type=\"submit\">Enviar</button></form></main>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -37,7 +41,9 @@ func ObraFormContent() templ.Component {
 	})
 }
 
-func ObraForm() templ.Component {
+/*Renderiza el formulario y listado de obras*/
+
+func ObraFormContent(obras []models.Obra) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -58,7 +64,50 @@ func ObraForm() templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = Layout("Agregar nueva obra", ObraFormContent()).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<main>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = ObraFormInLine().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = ObraListContent(obras).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</main>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+/*Renderiza el layout y le manda a que renderice el formulario y la lista*/
+
+func ObraForm(obras []models.Obra) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var3 == nil {
+			templ_7745c5c3_Var3 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = Layout("Agregar nueva obra", ObraFormContent(obras)).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

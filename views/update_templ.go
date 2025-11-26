@@ -31,7 +31,7 @@ func ActualizarObraPageContent(obras []models.Obra) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"actualizar-container\"><!-- LISTA IZQUIERDA --><div class=\"columna-lista\"><h3 class=\"subtitulo-seccion\">Obras:</h3><div class=\"lista-scroll\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"actualizar-container\" class=\"actualizar-container\"><div class=\"columna-lista\"><h3 class=\"subtitulo-seccion\">Obras:</h3><div class=\"lista-scroll\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -49,7 +49,7 @@ func ActualizarObraPageContent(obras []models.Obra) templ.Component {
 				var templ_7745c5c3_Var2 string
 				templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(obra.Titulo)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/update.templ`, Line: 17, Col: 49}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/update.templ`, Line: 15, Col: 49}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 				if templ_7745c5c3_Err != nil {
@@ -62,7 +62,7 @@ func ActualizarObraPageContent(obras []models.Obra) templ.Component {
 				var templ_7745c5c3_Var3 string
 				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(obra.ID)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/update.templ`, Line: 18, Col: 65}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/update.templ`, Line: 16, Col: 65}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
@@ -74,7 +74,7 @@ func ActualizarObraPageContent(obras []models.Obra) templ.Component {
 				}
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div></div><!-- FORMULARIO DERECHA --><div class=\"columna-formulario\"><p>Ingrese el id y los datos de la obra que desea actualizar</p>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</div></div><div class=\"columna-formulario\"><p>Ingrese el id y los datos de la obra que desea actualizar</p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

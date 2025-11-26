@@ -3,9 +3,7 @@ package views
 import "galeriadearte.com/models"
 
 templ ActualizarObraPageContent(obras []models.Obra) {
-<div class="actualizar-container">
-
-            <!-- LISTA IZQUIERDA -->
+<div id="actualizar-container" class="actualizar-container">
             <div class="columna-lista">
                 <h3 class="subtitulo-seccion">Obras:</h3>
                 <div class="lista-scroll">
@@ -22,7 +20,7 @@ templ ActualizarObraPageContent(obras []models.Obra) {
                 </div>
             </div>
 
-            <!-- FORMULARIO DERECHA -->
+           
             <div class="columna-formulario">
             <p>Ingrese el id y los datos de la obra que desea actualizar</p>
                 @ObraFormUpdateContent()

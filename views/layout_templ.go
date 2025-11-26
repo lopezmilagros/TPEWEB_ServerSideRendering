@@ -44,7 +44,7 @@ func Layout(title string, contents t.Component) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><link rel=\"stylesheet\" href=\"/static/styles.css\"><!-- HTMX --><script src=\"https://unpkg.com/htmx.org@1.9.10\" integrity=\"sha384-...\" crossorigin=\"anonymous\">\n        </script></head><body><header><nav><a href=\"/\">Inicio</a> <a href=\"exposiciones\">Exposiciones</a> <a href=\"listarObras\">Obras</a> <a href=\"agregar\">Añadir</a> <a href=\"actualizar\">Actualizar</a></nav></header><h2>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</title><link rel=\"stylesheet\" href=\"/static/styles.css\"><!-- HTMX --><script src=\"https://unpkg.com/htmx.org@1.9.10\" defer>\n        </script><link rel=\"icon\" type=\"image/x-icon\" href=\"/static/Imagenes/icono.jpg\"></head><body><header><nav><a href=\"/\">Inicio</a> <a href=\"exposiciones\">Exposiciones</a> <a href=\"listarObras\">Obras</a> <a href=\"agregar\">Añadir</a> <a href=\"actualizar\">Actualizar</a></nav></header><h2>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

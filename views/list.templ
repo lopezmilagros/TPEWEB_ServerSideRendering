@@ -1,7 +1,8 @@
 package views
 
-import ("galeriadearte.com/models"
-"strconv"
+import (
+    "galeriadearte.com/models"
+    "strconv"
 )
 
 templ ObraListContent(obras []models.Obra) {
@@ -13,19 +14,13 @@ templ ObraListContent(obras []models.Obra) {
                 <div class="shadowbox" data-id={ obra.ID } data-titulo={ obra.Titulo }>
                     <h3>{ obra.Titulo }</h3>
 
-                    <p>
-                        <strong>Artista:</strong> { obra.Artista }
-                    </p>
+                    <p> <strong>Artista:</strong> { obra.Artista } </p>
 
                     if obra.Descripcion != "" {
-                        <p>
-                            <strong>Descripción:</strong> { obra.Descripcion }
-                        </p>
+                        <p> <strong>Descripción:</strong> { obra.Descripcion } </p>
                     }
 
-                    <p>
-                        <strong>Precio:</strong> { obra.Precio }
-                    </p>
+                    <p> <strong>Precio:</strong> { obra.Precio } </p>
 
                     <p>{ obra.Vendida }</p>
 
@@ -35,9 +30,8 @@ templ ObraListContent(obras []models.Obra) {
                         hx-swap="outerHTML"
                         hx-confirm="¿Seguro que deseas eliminar esta obra?"
                     >
-    Eliminar
-</button>
-
+                        Eliminar
+                    </button>
 
                     <hr />
                 </div>
